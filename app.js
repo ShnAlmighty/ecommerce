@@ -5,6 +5,7 @@ const authRoutes = require('./src/routes/auth');
 const orderRoutes = require('./src/routes/order');
 const userRoutes = require('./src/routes/user');
 const adminRoutes = require('./src/routes/admin');
+const itemRoutes = require('./src/routes/item');
 
 dotenv.config();
 
@@ -27,7 +28,8 @@ app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/orders', orderRoutes);
 app.use('/user', userRoutes);
-app.use('/admin',adminRoutes);
+app.use('/admin', adminRoutes);
+app.use('/items', itemRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
