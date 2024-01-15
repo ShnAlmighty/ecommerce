@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const authRoutes = require('./src/routes/auth');
+const orderRoutes = require('./src/routes/order');
+const userRoutes = require('./src/routes/user');
 
 dotenv.config();
 
@@ -22,6 +24,8 @@ app.get('/', (req, res) => {
 app.use(express.json());
 
 app.use('/auth', authRoutes);
+app.use('/orders', orderRoutes);
+app.use('/user', userRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
