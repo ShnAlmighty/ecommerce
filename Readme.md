@@ -130,7 +130,7 @@ PATCH /items/:id
 This will be used to remove an item from the system
 
 ```http
-REMOVE /items/:id
+DELETE /items/:id
 ```
 | Header | Type     | Description                |
 | :-------- | :------- | :------------------------- |
@@ -160,7 +160,7 @@ POST /user/add-to-cart
 This will be used to remove an item from the cart
 
 ```http
-REMOVE /user/remove-from-cart/:id
+DELETE /user/remove-from-cart/:id
 ```
 | Header | Type     | Description                |
 | :-------- | :------- | :------------------------- |
