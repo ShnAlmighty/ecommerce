@@ -34,7 +34,11 @@ const orderDetails = async function(req, res) {
         }
       }
     ]);
-    const discount_codes = await Discount.find({}).select('discountCode -_id').lean();
+    const discount_codes_arr = await Discount.find({}).select('discountCode -_id').lean();
+    let discount_codes = [];
+    for(let codeObj of discount_codes_arr){
+      discount_codes.push(codeObj.discountCode);
+    }
     const orders_details = {
       total_items: ordersDetails[0].totalItems,
       total_amount: ordersDetails[0].totalAmount,
