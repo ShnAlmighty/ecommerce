@@ -5,5 +5,6 @@ const authenticateUser = require('../middlewares/auth');
 const router = express.Router();
 
 router.get('/me', authenticateUser, userController.getUserInfo);
+router.post('/add-to-cart', authenticateUser, userController.addToCart);
 
 module.exports = router;
