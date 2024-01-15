@@ -1,4 +1,4 @@
-# EcommerceHub
+# TweetHub
 
 ## Information
 This is a demonstration repository showcasing basic Ecommerce-like functionality through simple APIs.
@@ -20,7 +20,7 @@ $npm install
 $npm run dev
 ```
 
-## API Reference
+## API Documentation
 
 #### Register new user
 ```http
@@ -51,8 +51,8 @@ POST /auth/login
 | `email` | `string` | **Required**. Email Id of the user |
 | `password` | `string` | **Required**. Password of the user |
 
-#### Fetch information of logged-in user
-This will be used to fetch details of the logged-in user
+#### Fetch information of the user
+This will be used to fetch details of the logged-in user and their cart
 
 ```http
 GET /user/me
@@ -60,6 +60,85 @@ GET /user/me
 | Header | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `Authorization` | `string` | **Required**. Should contain Bearer token |
+
+#### Add Item
+This will be used to add items in the system
+
+```http
+POST /items/add
+```
+| Header | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` | `string` | **Required**. Should contain  Bearer token |
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `name` | `array` | **Required**. Name of the item |
+| `quantity` | `array` | **Required**. Quantity of item |
+| `amount` | `array` | **Required**. amount of a single item |
+
+#### Fetch All Items 
+This will be used to fetch all the items present in the system
+
+```http
+GET /items
+```
+| Header | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` | `string` | **Required**. Should contain Bearer token |
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `page` | `number` | Pagination number |
+| `limit` | `number` | Pagination limit |
+
+#### Get Info of an item
+This will be used to fetch information of a single item
+
+```http
+GET /items/:id
+```
+| Header | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` | `string` | **Required**. Should contain Bearer token |
+
+| Path Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**. ID of the item which can be either `_id` or `item_id` |
+
+#### Update an Item
+This will be used to update an item such as changing it's name or quantity
+
+```http
+PATCH /items/:id
+```
+| Header | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` | `string` | **Required**. Should contain  Bearer token |
+
+| Path Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**. ID of the item which can be either `_id` or `item_id` |
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `name` | `array` | **Required**. Name of the item |
+| `quantity` | `array` | **Required**. Quantity of item |
+| `amount` | `array` | **Required**. amount of a single item |
+
+#### Remove an item from System
+This will be used to remove an item from the system
+
+```http
+REMOVE /items/:id
+```
+| Header | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` | `string` | **Required**. Should contain Bearer token |
+
+| Path Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**. ID of the item which can be either `_id` or `item_id` |
 
 #### Add to Cart
 This will be used to items to the cart of an user
@@ -74,11 +153,22 @@ POST /user/add-to-cart
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `items` | `array` | **Required**. Array of objects detailing item information |
-| `items.id` | `array` | **Required**. ID of the item |
-| `items.name` | `array` | **Required**. Name of the item |
+| `items.item_id` | `array` | **Required**. ID of the item which can be either `_id` or `item_id` |
 | `items.quantity` | `array` | **Required**. Quantity of item |
-| `items.amount` | `array` | **Required**. amount of a single item |
 
+#### Remove an Item from Cart
+This will be used to remove an item from the cart
+
+```http
+REMOVE /user/remove-from-cart/:id
+```
+| Header | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` | `string` | **Required**. Should contain Bearer token |
+
+| Path Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**. ID of the item which can be either `_id` or `item_id` |
 
 #### Checkout
 This will be used to checkout with the current items in the cart
@@ -114,8 +204,8 @@ GET /admin/order_details
 | :-------- | :------- | :------------------------- |
 | `Authorization` | `string` | **Required**. Should contain  Bearer token |
 
-#### Fetch All Orders of the logged in user
-This will be used to fetch all orders of an user
+#### Fetch All Orders of the user
+This will be used to fetch all orders of the logged-in user
 
 ```http
 GET /orders
