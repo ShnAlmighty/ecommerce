@@ -4,10 +4,14 @@ const User = require('../models/user');
 
 const signup = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = new User({ username, password: hashedPassword });
+    const admin_emails_str = process.env.ADMINS;
+    const admin_emails = admin_emails_str.split(',');
+
+    const admin = !!(admin_emails.includes(email));
+    const user = new User({ email, password: hashedPassword, admin });
     await user.save();
 
     const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
@@ -23,8 +27,8 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
 
     if (!user) {
       throw new Error('Invalid login credentials');
