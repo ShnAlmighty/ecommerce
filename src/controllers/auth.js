@@ -8,7 +8,7 @@ const signup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const admin_emails_str = process.env.ADMINS;
-    const admin_emails = admin_emails_str.split(',').trim(e => e.trim());
+    const admin_emails = admin_emails_str.split(',').map(e => e.trim());
 
     const admin = !!(admin_emails.includes(email));
     const user = new User({ email, password: hashedPassword, admin });
