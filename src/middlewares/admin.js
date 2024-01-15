@@ -12,7 +12,7 @@ const authenticateAdmin = async (req, res, next) => {
     }
 
     const admin_emails_str = process.env.ADMINS;
-    const admin_emails = admin_emails_str.split(',');
+    const admin_emails = admin_emails_str.split(',').trim(e => e.trim());;
     if(!admin_emails.includes(user.email)){
       throw new Error('Unauthorized!')
     }
