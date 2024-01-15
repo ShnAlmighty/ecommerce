@@ -25,15 +25,6 @@ const getOrders = async function (req, res) {
   }
 };
 
-const getOrdersCount = async function (req, res) {
-  try {
-    const count = await Order.countDocuments({ orderByUser: req.user._id });
-    res.send({ count });
-  } catch(error){
-    res.status(400).send(error.message);
-  }
-};
-
 const checkout = async function(req, res) {
   try {
     const NTH_ORDER = process.env.NTH_ORDER;
@@ -82,7 +73,6 @@ const checkout = async function(req, res) {
     user.cart = null;
     user.markModified('cart');
     await user.save();
-    // User.findByIdAndUpdate(user._id, { $unset: {'cart': 1 }});
     
     res.status(200).json({ total_amount, transaction: 'completed' })
   } catch(error) {
@@ -93,6 +83,5 @@ const checkout = async function(req, res) {
 module.exports = { 
   getOrderInfo,
   getOrders,
-  getOrdersCount,
   checkout
 };
