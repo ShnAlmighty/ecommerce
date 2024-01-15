@@ -1,11 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const authRoutes = require('./src/routes/auth');
 
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3005;
+const port = process.env.PORT || 3000;
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
@@ -19,6 +20,8 @@ app.get('/', (req, res) => {
 })
 
 app.use(express.json());
+
+app.use('/auth', authRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
