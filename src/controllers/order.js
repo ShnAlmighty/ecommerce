@@ -1,5 +1,5 @@
 const Order = require('../models/order');
-const User = require('../models/user');
+const Discount = require('../models/discount');
 
 const getOrderInfo = async function (req, res) {
   try {
@@ -42,6 +42,10 @@ const checkout = async function(req, res) {
     const discount_code = req.body?.discount_code ?? null;
     let discount = 0;
     if(discount_code){
+      const discountDoc = await Discount.findOne({ discountCode: discount_code }).lean();
+      if(!discountDoc){
+        throw new Error('Coupon Invalid!')
+      }
       const totalOrders = await Order.find().countDocuments();
       if ((totalOrders % (NTH_ORDER - 1)) !== 0) {
         throw new Error("Coupon Invalid!")
