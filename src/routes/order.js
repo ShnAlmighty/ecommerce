@@ -7,5 +7,6 @@ const router = express.Router();
 router.get('/', authenticateUser, orderController.getOrders);
 router.get('/:id', authenticateUser, orderController.getOrderInfo);
 router.get('/count', authenticateUser, orderController.getOrdersCount);
+router.post('/checkout', authenticateUser, orderController.checkout);
 
 module.exports = router;
