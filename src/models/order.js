@@ -8,6 +8,6 @@ const orderSchema = new mongoose.Schema({
   created_at: { type: Date, default: new Date() }
 });
 
-const User = mongoose.model('User', orderSchema);
+const Order = mongoose.model('Order', orderSchema);
 
-module.exports = User;
+module.exports = Order;
