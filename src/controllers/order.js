@@ -14,7 +14,7 @@ const getOrders = async function (req, res) {
   try {
     const page = req.query.page || 1;
     const limit = req.query.limit || 10;
-    const orders = await Order.find({ orderBy: req.user._id })
+    const orders = await Order.find({ orderByUser: req.user._id })
     .sort('-created_at')
     .skip((page - 1) * limit)
     .limit(limit)
@@ -27,7 +27,7 @@ const getOrders = async function (req, res) {
 
 const getOrdersCount = async function (req, res) {
   try {
-    const count = await Order.countDocuments({ orderBy: req.user._id });
+    const count = await Order.countDocuments({ orderByUser: req.user._id });
     res.send({ count });
   } catch(error){
     res.status(400).send(error.message);
@@ -71,7 +71,7 @@ const checkout = async function(req, res) {
       discountAmount: discount_amount,
       billableAmount: billable_total_amount,
       items: cart,
-      orderBy: user._id,
+      orderByUser: user._id,
       discountCode: discount_code
     }
     const order = new Order(orderObj);
