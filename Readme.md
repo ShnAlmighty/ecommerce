@@ -1,4 +1,4 @@
-# TweetHub
+# EcommerceHub
 
 ## Information
 This is a demonstration repository showcasing basic Ecommerce-like functionality through simple APIs.
