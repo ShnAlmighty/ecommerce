@@ -47,7 +47,10 @@ const getAllItems = async(req, res) => {
 
 const addItem = async function (req, res) {
   try {
-    const { name, amount, quantity } = req.body;
+    const { name=null, amount=null, quantity=null } = req.body;
+    if(!name || !amount || !quantity){
+      return res.status(400).send("Kindly provide all details of the item!");
+    }
     const user = req.user;
     
     const item_id = `Item_${nanoid(5)}`;
@@ -88,13 +91,13 @@ const updateItem = async function (req, res) {
 
 const removeItem = async(req, res) => {
   try {
-    let item = await Item.findByIdAndDelete(req.params.id);
+    let item = await fetchItemUtility(req.params.id);
     if(!item){
-      item = await Item.findOneAndDelete({ item_id: req.params.id});
-      if(!item){
-        return res.status(404).send('Item not found');
-      }
-    }
+      return res.status(404).send('Item not found');
+    };
+    await item.deleteOne();
+    const item_temp = await Item.findOne({ item_id: item.item_id });
+    console.log({item_temp})
     res.json({ item });
   } catch(error){
     res.status(400).send(error.message);

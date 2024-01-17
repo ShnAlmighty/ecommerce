@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test-auth": "mocha ./src/tests/auth.test.js --timeout 2000"
+    "test-auth": "mocha ./src/tests/auth.test.js --timeout 2000",
+    "test-items": "mocha ./src/tests/items.test.js --timeout 2000"  
   },
   "keywords": [],
   "author": "",
