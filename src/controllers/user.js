@@ -21,16 +21,6 @@ const getCartDetails = async function (req, res) {
   }
 };
 
-const fetchItem = async function(item_id) {
-  try {
-    const itemDoc = await Item.findOne({ item_id });
-    return itemDoc;
-  } catch(err) {
-    console.error(err.message);
-    return null;
-  }
-};
-
 const addToCart = async function (req, res) {
   try {
     const { items } = req.body;
@@ -77,6 +67,56 @@ const addToCart = async function (req, res) {
   }
 };
 
+const updateItemInCart = async function (req, res) {
+  try {
+    const item_id = req.params.id;
+    const user = req.user;
+    let cart = user.cart || {};
+
+    if(Object.keys(cart).length == 0) {
+      return res.status(400).send("Cart is empty!");
+    }
+
+    const cart_item = cart[item_id] ?? null;
+
+    if(!cart_item){
+      return res.status(404).send("item not found in the cart");
+    }
+
+    const { quantity } = req.body;
+
+    if(!quantity){
+      return res.status(400).send("quantity property is required");
+    }
+
+    const itemDoc = await itemController.fetchItemUtility(req.params.id);
+    if(!itemDoc){
+      return res.status(404).send(`Following item not found: ${req.params.id}`);
+    }
+
+    if(quantity > itemDoc.quantity){
+      return res.status(400).send(`Error: quantity for item ${item_id} exceeds existing stock`);
+    }
+
+    const prev_qty = cart_item.quantity;
+
+    cart_item.quantity = quantity;
+
+    cart[item_id] = cart_item;
+
+    const userUpdated = await User.findOneAndUpdate({ email: user.email }, { "$set": { cart } }, { new: true })
+
+    const cart_item_quantity = cart_item.quantity;
+    itemDoc.quantity = itemDoc.quantity - (cart_item_quantity - prev_qty);
+    await itemDoc.save();
+
+    res.json({ cart: userUpdated.cart });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: 'Internal Server Error' });
+  }
+};
+
 const removeFromCart = async function (req, res) {
   try {
     const user = req.user;
@@ -110,5 +150,6 @@ module.exports = {
   getUserInfo,
   getCartDetails,
   addToCart,
+  updateItemInCart,
   removeFromCart
 };

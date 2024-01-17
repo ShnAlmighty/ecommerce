@@ -111,11 +111,31 @@ describe('Orders API Test Cases', () => {
     const cart = user.cart || {};
     expect(Object.keys(cart).length).to.equal(1);
     expect(Object.keys(cart)[0]).to.equal(item.item_id);
-    const qty_before = item.quantity;
+    const item_stock_before = item.quantity;
     item = await Item.findById(item._id);
-    expect(item.quantity).to.equal((qty_before-item_qty_to_be_added));
+    expect(item.quantity).to.equal((item_stock_before-item_qty_to_be_added));
   });
 
+  it('should edit the item in the cart', async () => {
+    const item_qty_to_be_updated = 3;
+    const item_qty_present_in_cart = user.cart[item.item_id].quantity;
+    const response = await superagent
+        .patch(`${server}/user/update-cart-item/${item.item_id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          "quantity": item_qty_to_be_updated,
+        });
+
+    expect(response.status).to.equal(200);
+    user = await User.findById(user._id);
+    const cart = user.cart || {};
+    expect(Object.keys(cart).length).to.equal(1);
+    expect(Object.keys(cart)[0]).to.equal(item.item_id);
+    expect(cart[item.item_id].quantity).to.equal(item_qty_to_be_updated);
+    const item_stock_before = item.quantity;
+    item = await Item.findById(item._id);
+    expect(item.quantity).to.equal((item_stock_before-(item_qty_to_be_updated - item_qty_present_in_cart)));
+  });
 
   it('should not be able to checkout with coupon that it not present', (done) => { 
     superagent
