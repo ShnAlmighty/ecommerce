@@ -73,9 +73,9 @@ POST /items/add
 
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `name` | `array` | **Required**. Name of the item |
-| `quantity` | `array` | **Required**. Quantity of item |
-| `amount` | `array` | **Required**. amount of a single item |
+| `name` | `string` | **Required**. Name of the item |
+| `quantity` | `number` | **Required**. Quantity of item |
+| `amount` | `number` | **Required**. amount of a single item |
 
 #### Fetch All Items 
 This will be used to fetch all the items present in the system
@@ -122,9 +122,9 @@ PATCH /items/:id
 
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `name` | `array` | **Required**. Name of the item |
-| `quantity` | `array` | **Required**. Quantity of item |
-| `amount` | `array` | **Required**. amount of a single item |
+| `name` | `string` | **Required**. Name of the item |
+| `quantity` | `number` | **Required**. Quantity of item |
+| `amount` | `number` | **Required**. amount of a single item |
 
 #### Remove an item from System
 This will be used to remove an item from the system
@@ -153,8 +153,26 @@ POST /user/add-to-cart
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `items` | `array` | **Required**. Array of objects detailing item information |
-| `items.item_id` | `array` | **Required**. ID of the item which can be either `_id` or `item_id` |
-| `items.quantity` | `array` | **Required**. Quantity of item |
+| `items.item_id` | `string` | **Required**. ID of the item which can be either `_id` or `item_id` |
+| `items.quantity` | `number` | **Required**. Quantity of item |
+
+#### Update an Item in the Cart
+This will be used to update the quantity of an item in the cart
+
+```http
+PATCH /user/update-cart-item/:id
+```
+| Header | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` | `string` | **Required**. Should contain  Bearer token |
+
+| Path Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**. ID of the item which can be either `_id` or `item_id` |
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+|`quantity` | `number` | **Required**. Quantity of the item |
 
 #### Remove an Item from Cart
 This will be used to remove an item from the cart
@@ -182,7 +200,7 @@ GET /orders/checkout
 
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `discount_code` | `number` | Discount code if any |
+| `discount_code` | `string` | Discount code if any |
 
 #### **ADMIN APIs**: Generate Discount Code
 This will be used to generate a discount code for the system
