@@ -67,12 +67,10 @@ const addToCart = async function (req, res) {
         [item_id]: itemObj
       }
     };
-    user.cart = cart;
 
-    user.markModified('cart');
-    await user.save();
+    const updatedUser = await User.findOneAndUpdate({ email: user.email }, { "$set": { cart } }, { new: true })
 
-    res.json({ cart });
+    res.json({ cart: updatedUser.cart });
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: 'Internal Server Error' });
@@ -94,16 +92,14 @@ const removeFromCart = async function (req, res) {
     if(!cart_item){
       return res.status(404).send(`Item not found in the cart`);
     }
-
-    delete cart[item_id];
-    user.markModified('cart');
-    await user.save();
+    const cart_item_key = `cart.${itemDoc.item_id}`;
+    const userUpdated = await User.findOneAndUpdate({ email: user.email }, { "$unset": { [cart_item_key]: "" } }, { new: true });
 
     const cart_item_quantity = cart_item.quantity;
     itemDoc.quantity = itemDoc.quantity + cart_item_quantity;
     await itemDoc.save();
 
-    res.json({ cart });
+    res.json({ cart: userUpdated.cart });
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: 'Internal Server Error' });
